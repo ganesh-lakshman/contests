@@ -12,26 +12,39 @@ app.get("/", function (req, res) {
     })
     res.sendFile("C:/Users/Ganesh Lakshman/Downloads/CodeEditor/index.html")
 })
-app.post("/submit", function (req, res) {
-    const testCases = [
-        {
-            input: "2\n3\n",
-            expectedOutput: "5\n"
-        },
-        {
-            input: "10\n20\n",
-            expectedOutput: "30\n"
-        },
-        {
-            input: "0\n0\n",
-            expectedOutput: "0\n"
-        },
-        // add more test cases as needed
-    ];
+// app.post("/api", function(req, res) {
+//     // console.log(req.body.api.questions[0].testCases)
+//     // testCases = req.body.api.questions[0].testCases
+//     res.sendStatus(200);
+// })
+app.post("/submit/:questionId", function (req, res) {
+    const questionId = req.params.questionId;
+    const testCases = req.body.api.questions.find(q => q.id == questionId).testCases;
+    console.log(testCases);
     
-    var code = req.body.code
+    // const testCases = [
+    //     {
+    //         input: "2\n3\n",
+    //         expectedOutput: "5\n"
+    //     },
+    //     {
+    //         input: "10\n20\n",
+    //         expectedOutput: "30\n"
+    //     },
+    //     {
+    //         input: "0\n0\n",
+    //         expectedOutput: "0\n"
+    //     },
+    //     // add more test cases as needed
+    // ];
+    
+      
+    var code = req.body.code.code
+    console.log(code)
     // var input = req.body.input.replace(/\s+/g, '\n');
-    var lang = req.body.lang
+    var lang = req.body.code.lang
+    console.log(lang)
+    // console.log(req.body.code.questionid)
     try {
         if (lang == "Python") { 
             const maxScore = 100; // set the maximum score for the contest
@@ -116,7 +129,7 @@ app.post("/submit", function (req, res) {
         }
     }
     catch (e) {
-        console.log("error")
+        console.log(e)
     }
 
 })
@@ -124,6 +137,7 @@ app.post("/compile", function (req, res) {
     var code = req.body.code
     var input = req.body.input.replace(/\s+/g, '\n');
     var lang = req.body.lang
+    console.log(req.body.questionid)
     try {
 
         if (lang == "Cpp" || lang=="C") {
