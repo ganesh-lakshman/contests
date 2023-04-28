@@ -294,7 +294,7 @@ function updateQuestionCard() {
 
 
 
-    var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    let editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
         mode: "text/x-c++src",
         theme: "dracula",
         lineNumbers: true,
@@ -306,15 +306,15 @@ function updateQuestionCard() {
         editor.execCommand('toggleComment');
     }
     });
-    var width = window.innerWidth
-    var input = document.getElementById("input")
-    var output = document.getElementById("output")
-    var result = document.getElementById("result")
-    var run = document.getElementById("run")
-    var submit = document.getElementById("submit")
-    var questionid = document.getElementById("q-id")
+    let width = window.innerWidth
+    let input = document.getElementById("input")
+    let output = document.getElementById("output")
+    let result = document.getElementById("result")
+    let run = document.getElementById("run")
+    let submit = document.getElementById("submit")
+    let questionid = document.getElementById("q-id")
     editor.setSize(0.7 * width, "500")
-    var option = document.getElementById("inlineFormSelectPref")
+    let option = document.getElementById("inlineFormSelectPref")
     option.addEventListener("change", function () {
         if (option.value == "Java") {
             editor.setOption("mode", "text/x-java")
@@ -329,7 +329,7 @@ function updateQuestionCard() {
             editor.setOption("mode", "text/x-csrc")
         }
     })
-    var code;
+    let code;
     run.addEventListener("click", async function () {
         code = {
             code: editor.getValue(),
@@ -338,7 +338,7 @@ function updateQuestionCard() {
             questionid: questionid.value
         }
         console.log(code)
-        var oData = await fetch("http://localhost:8000/compile", {
+        let oData = await fetch("http://localhost:8000/compile", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -347,7 +347,7 @@ function updateQuestionCard() {
             body: JSON.stringify(code)
         })
         console.log(oData)
-        var d = await oData.json()
+        let d = await oData.json()
         
         output.value = d.output
     })
@@ -359,7 +359,7 @@ function updateQuestionCard() {
             lang: option.value,
             questionid: questionid.value
         }
-        var oData = await fetch(`http://localhost:8000/submit/${questionid.value}`, {
+        let oData = await fetch(`http://localhost:8000/submit/${questionid.value}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -367,7 +367,7 @@ function updateQuestionCard() {
             },
             body: JSON.stringify({api: api, code: code})
         })
-        var d = await oData.json()
+        let d = await oData.json()
         let count = 1;
         for(const testresult of d.testResults)
         {
