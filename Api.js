@@ -2,15 +2,16 @@ const express = require("express")
 const app = express()
 const bodyP = require("body-parser")
 const compiler = require("compilex")
+const path = require('path')
 const options = { stats: true }
 compiler.init(options)
 app.use(bodyP.json())
-app.use("/codemirror-5.65.12", express.static("C:/Users/Ganesh Lakshman/Downloads/CodeEditor/codemirror-5.65.12"))
+app.use("/codemirror-5.65.12", express.static(path.join(__dirname + "/codemirror-5.65.12")))
 app.get("/", function (req, res) {
     compiler.flush(function () {
         console.log("deleted")
     })
-    res.sendFile("C:/Users/Ganesh Lakshman/Downloads/CodeEditor/index.html")
+    res.sendFile(path.join(__dirname + "/index.html"))
 })
 // app.post("/api", function(req, res) {
 //     // console.log(req.body.api.questions[0].testCases)
@@ -39,10 +40,10 @@ app.post("/submit/:questionId", function (req, res) {
     // ];
     
       
-    var code = req.body.code.code
+    let code = req.body.code.code
     console.log(code)
-    // var input = req.body.input.replace(/\s+/g, '\n');
-    var lang = req.body.code.lang
+    // let input = req.body.input.replace(/\s+/g, '\n');
+    let lang = req.body.code.lang
     console.log(lang)
     // console.log(req.body.code.questionid)
     try {
@@ -55,7 +56,7 @@ app.post("/submit/:questionId", function (req, res) {
             for (const testCase of testCases) {
                 const input = testCase.input;
                 const expectedOutput = testCase.expectedOutput;
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 
                 compiler.compilePythonWithInput(envData, code, input, function (data) {
                     if (data.output) {
@@ -91,7 +92,7 @@ app.post("/submit/:questionId", function (req, res) {
             for (const testCase of testCases) {
                 const input = testCase.input;
                 const expectedOutput = testCase.expectedOutput;
-                var envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
+                let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
                 compiler.compilePythonWithInput(envData, code, input, function (data) {
                     if (data.output) {
                         const actualOutput = data.output.trim();
@@ -111,7 +112,7 @@ app.post("/submit/:questionId", function (req, res) {
             for (const testCase of testCases) {
                 const input = testCase.input;
                 const expectedOutput = testCase.expectedOutput;
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 compiler.compilePythonWithInput(envData, code, input, function (data) {
                     console.log("came")
                     if (data.output) {
@@ -134,15 +135,15 @@ app.post("/submit/:questionId", function (req, res) {
 
 })
 app.post("/compile", function (req, res) {
-    var code = req.body.code
-    var input = req.body.input.replace(/\s+/g, '\n');
-    var lang = req.body.lang
+    let code = req.body.code
+    let input = req.body.input.replace(/\s+/g, '\n');
+    let lang = req.body.lang
     console.log(req.body.questionid)
     try {
 
         if (lang == "Cpp" || lang=="C") {
             if (!input) {
-                var envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
+                let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
                 compiler.compileCPP(envData, code, function (data) {
                     if (data.output) {
                         res.send(data);
@@ -153,7 +154,7 @@ app.post("/compile", function (req, res) {
                 });
             }
             else {
-                var envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
+                let envData = { OS: "windows", cmd: "g++", options: { timeout: 10000 } }; // (uses g++ command to compile )
                 compiler.compileCPPWithInput(envData, code, input, function (data) {
                     if (data.output) {
                         res.send(data);
@@ -166,7 +167,7 @@ app.post("/compile", function (req, res) {
         }
         else if (lang == "Java") {
             if (!input) {
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 compiler.compileJava(envData, code, function (data) {
                     if (data.output) {
                         res.send(data);
@@ -178,7 +179,7 @@ app.post("/compile", function (req, res) {
             }
             else {
                 //if windows  
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 //else
                 compiler.compileJavaWithInput(envData, code, input, function (data) {
                     if (data.output) {
@@ -193,7 +194,7 @@ app.post("/compile", function (req, res) {
         else if (lang == "Python") {
             
             if (!input) {
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 compiler.compilePython(envData, code, function (data) {
                     if (data.output) {
                         res.send(data);
@@ -204,7 +205,7 @@ app.post("/compile", function (req, res) {
                 });
             }
             else {
-                var envData = { OS: "windows" };
+                let envData = { OS: "windows" };
                 compiler.compilePythonWithInput(envData, code, input, function (data) {
                     if (data.output) {
                         res.send(data);
