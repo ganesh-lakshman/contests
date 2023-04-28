@@ -6,7 +6,7 @@ clone the repo and run "npm start".
 ## might implement:
 Add validation to the user's input. For example, if the user enters a non-numeric value in the input field, you can display an error message and prevent the user from submitting the form.
 
-~~ Add a timer to each question to limit the time the user has to answer. Once the time runs out, you can automatically move to the next question. ~~
+~~Add a timer to each question to limit the time the user has to answer. Once the time runs out, you can automatically move to the next question.~~
 
 Add a feature to save the user's progress so that if they leave the page and come back later, they can resume where they left off.
 
