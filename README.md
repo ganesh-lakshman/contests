@@ -4,7 +4,7 @@ All thanks to Chatgpt.
 clone the repo and run "npm start".
 
 ## might implement:
-Add validation to the user's input. For example, if the user enters a non-numeric value in the input field, you can display an error message and prevent the user from submitting the form.
+~~Add validation to the user's input. For example, if the user enters a non-numeric value in the input field, you can display an error message and prevent the user from submitting the form.~~
 
 ~~Add a timer to each question to limit the time the user has to answer. Once the time runs out, you can automatically move to the next question.~~
 
