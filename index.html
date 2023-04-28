@@ -29,12 +29,18 @@
         <div class="col">
           <div class="card bg-light">
             <div class="card-body">
-              <h2 class="card-title mb-4">Question 1: Add Two Numbers</h2>
-              <p class="card-text">Write a program that takes two integers as input and outputs their sum.</p>
-              <h5 class="card-subtitle mt-4">Input Format:</h5>
-              <p class="card-text">The input consists of two integers a and b (−10<sup>3</sup>≤a,b≤10<sup>3</sup>).</p>
-              <h5 class="card-subtitle mt-4">Output Format:</h5>
-              <p class="card-text">Output a single integer, the sum of a and b.</p>
+              <input type="hidden" id="q-id" value="1">
+              <h2 class="card-title mb-4"></h2>
+              <p class="card-text"></p>
+              <h5 class="card-subtitle mt-4"></h5>
+              <p class="card-text"></p>
+              <h5 class="card-subtitle mt-4"></h5>
+              <p class="card-text"></p>
+              <div class="d-flex timer mb-4">
+                <div class="p-2 bg-dark text-light rounded" id="timer">
+                  <span id="minutes">00</span>:<span id="seconds">00</span>
+                </div>
+              </div>
               <div class="buttons">
                 <button id="previous">Previous</button>
                 <button id="next">Next</button>
@@ -86,22 +92,194 @@
 <script>
 
 
+const api = {
+        questions: [
+          {
+            id: 1,
+            title: "Add Two Numbers",
+            description: "Write a program that takes two integers as input and outputs their sum.",
+            inputFormat: "The input consists of two integers a and b (−10^3 ≤ a,b ≤ 10^3).",
+            outputFormat: "Output a single integer, the sum of a and b.",
+            testCases: [
+              {
+                input: "2\n3\n",
+                expectedOutput: "5\n"
+              },
+              {
+                input: "10\n20\n",
+                expectedOutput: "30\n"
+              },
+              {
+                input: "0\n0\n",
+                expectedOutput: "0\n"
+              },
+              // add more test cases as needed
+            ],
+            timeLimit: 30 // time limit for this question in seconds
+          },
+          {
+            id: 2,
+            title: "Power of Two Numbers",
+            description: "Write a program that takes two integers as input and outputs the result of raising the first number to the power of the second number.",
+            inputFormat: "The input consists of two integers a and b (0 ≤ a,b ≤ 10^9).",
+            outputFormat: "Output a single integer, the result of raising a to the power of b.",
+            testCases: [
+              {
+                input: "2\n3\n",
+                expectedOutput: "8\n"
+              },
+              {
+                input: "10\n2\n",
+                expectedOutput: "100\n"
+              },
+              {
+                input: "5\n0\n",
+                expectedOutput: "1\n"
+              },
+              // add more test cases as needed
+            ],
+            timeLimit: 30 // time limit for this question in seconds
+          },
+          {
+            id: 3,
+            title: "Multiply Two Numbers",
+            description: "Write a program that takes two integers as input and outputs their product.",
+            inputFormat: "The input consists of two integers a and b (−10^3 ≤ a,b ≤ 10^3).",
+            outputFormat: "Output a single integer, the product of a and b.",
+            testCases: [
+              {
+                input: "2\n3\n",
+                expectedOutput: "6\n"
+              },
+              {
+                input: "10\n20\n",
+                expectedOutput: "200\n"
+              },
+              {
+                input: "0\n100\n",
+                expectedOutput: "0\n"
+              },
+              // add more test cases as needed
+            ],
+            timeLimit: 30 // time limit for this question in seconds
+          },
+          // add more questions as needed
+        ]
+      };
 
 
+//     fetch("http://localhost:8000/api", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//     'Access-Control-Allow-Origin': '*'
+//   },
+//   body: JSON.stringify({api: api})
+// })
+//   .then(response => {
+//     console.log(response);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
 
+let currentQuestionIndex = 0;
+let timer = null;
 
+function startTimer(timeLimit, questionIndex) {
+  const timerDisplay = document.querySelector("#timer");
 
+  // clear any existing timer
+  if (timer !== null) {
+    clearInterval(timer);
+  }
 
+  // check if there's a saved time remaining for the current question
+  const savedTime = localStorage.getItem(`question-${questionIndex}-time`);
+  let timeLeft = savedTime !== null ? parseInt(savedTime) : timeLimit;
 
+  // update the timer display every second
+  timer = setInterval(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
+    // add leading zeros if needed
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+    const formattedSeconds = seconds.toString().padStart(2, "0");
 
+    timerDisplay.innerHTML = `<span id="minutes">${formattedMinutes}</span>:<span id="seconds">${formattedSeconds}</span>`;
 
+    timeLeft--;
 
+    // save the time remaining to local storage
+    localStorage.setItem(`question-${questionIndex}-time`, timeLeft.toString());
 
+    if (timeLeft < 0) {
+      clearInterval(timer);
 
+      // remove the saved time from local storage
+      localStorage.removeItem(`question-${questionIndex}-time`);
+      showNextQuestion();
+    }
+  }, 1000);
+}
 
+const previousButton = document.getElementById('previous');
+const nextButton = document.getElementById('next');
 
+previousButton.addEventListener('click', showPreviousQuestion);
+nextButton.addEventListener('click', showNextQuestion);
 
+window.addEventListener('load', function() {
+  // disable the "Previous" button if the current question index is 0
+  previousButton.disabled = (currentQuestionIndex === 0);
+  updateQuestionCard()
+});
+
+function showPreviousQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    updateQuestionCard();
+  }
+  
+}
+
+function showNextQuestion() {
+  if (currentQuestionIndex < api.questions.length - 1) {
+    currentQuestionIndex++;
+    updateQuestionCard();
+  }
+  
+}
+
+function updateQuestionCard() {
+  const question = api.questions[currentQuestionIndex];
+  document.getElementById('q-id').value = question.id;
+  document.querySelector('.card-title').textContent = `Question ${question.id}: ${question.title}`;
+  document.querySelector('.card-text').textContent = question.description;
+  document.querySelectorAll('.card-subtitle')[0].textContent = 'Input Format:';
+  document.querySelectorAll('.card-text')[1].textContent = question.inputFormat;
+  document.querySelectorAll('.card-subtitle')[1].textContent = 'Output Format:';
+  document.querySelectorAll('.card-text')[2].textContent = question.outputFormat;
+
+  // start the timer for the current question
+  startTimer(question.timeLimit, question.id);
+
+  // disable previous button on first question
+  if (currentQuestionIndex === 0) {
+    previousButton.disabled = true;
+  } else {
+    previousButton.disabled = false;
+  }
+
+  // disable next button on last question
+  if (currentQuestionIndex === api.questions.length - 1) {
+    nextButton.disabled = true;
+  } else {
+    nextButton.disabled = false;
+  }
+
+}
 
 
 
@@ -134,7 +312,7 @@
     var result = document.getElementById("result")
     var run = document.getElementById("run")
     var submit = document.getElementById("submit")
-    
+    var questionid = document.getElementById("q-id")
     editor.setSize(0.7 * width, "500")
     var option = document.getElementById("inlineFormSelectPref")
     option.addEventListener("change", function () {
@@ -156,7 +334,8 @@
         code = {
             code: editor.getValue(),
             input: input.value,
-            lang: option.value
+            lang: option.value,
+            questionid: questionid.value
         }
         console.log(code)
         var oData = await fetch("http://localhost:8000/compile", {
@@ -173,30 +352,41 @@
         output.value = d.output
     })
     submit.addEventListener("click", async function () {
+        result.innerHTML = ""
         code = {
             code: editor.getValue(),
             input: input.value,
-            lang: option.value
+            lang: option.value,
+            questionid: questionid.value
         }
-        var oData = await fetch("http://localhost:8000/submit", {
+        var oData = await fetch(`http://localhost:8000/submit/${questionid.value}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 'Access-Control-Allow-Origin': '*'
             },
-            body: JSON.stringify(code)
+            body: JSON.stringify({api: api, code: code})
         })
         var d = await oData.json()
         let count = 1;
         for(const testresult of d.testResults)
         {
-
-            result.innerHTML +="test case " + count + ": " + testresult + "<br />"
+            if(testresult === 'Passed')
+            {
+            result.innerHTML +="test case " + count + ": " + testresult + "✅" + "<br />"
+            }
+            else
+            {
+              result.innerHTML +="test case " + count + ": " + testresult + "❌" + "<br />"
+            }
             count++;
         }
         result.innerHTML += "Total Score: " + d.score
     })
 
+
+
+    
 </script>
 
 </html>
