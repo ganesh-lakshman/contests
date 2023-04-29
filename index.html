@@ -331,13 +331,14 @@ function updateQuestionCard() {
     })
     let code;
     run.addEventListener("click", async function () {
+        
         code = {
             code: editor.getValue(),
             input: input.value,
             lang: option.value,
             questionid: questionid.value
         }
-        console.log(code)
+        // console.log(code)
         let oData = await fetch("http://localhost:8000/compile", {
             method: "POST",
             headers: {
@@ -346,7 +347,7 @@ function updateQuestionCard() {
             },
             body: JSON.stringify(code)
         })
-        console.log(oData)
+        // console.log(oData)
         let d = await oData.json()
         
         output.value = d.output
