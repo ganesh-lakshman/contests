@@ -2,6 +2,7 @@
 
 All thanks to Chatgpt.
 clone the repo and run "npm start".
+If you are on a Linux machine. Change some variables in Api.js
 
 ## might implement:
 ~~Add validation to the user's input. For example, if the user enters a non-numeric value in the input field, you can display an error message and prevent the user from submitting the form.~~
