@@ -2,7 +2,9 @@
 
 All thanks to Chatgpt.
 clone the repo and run "npm start".
-If you are on a Linux machine, Change some variables in Api.js
+If you are on a Linux machine, Change some variables in Api.js.
+make sure you are using correct localhost port.
+Use eval function for implementing JS code.
 
 ## might implement:
 ~~Add validation to the user's input. For example, if the user enters a non-numeric value in the input field, you can display an error message and prevent the user from submitting the form.~~
