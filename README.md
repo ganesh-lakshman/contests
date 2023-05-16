@@ -1,6 +1,6 @@
 # contests
 
-All thanks to Chatgpt.
+All thanks to Chatgpt3.
 clone the repo and run "npm start".
 If you are on a Linux machine, Change some variables in Api.js.
 make sure you are using correct localhost port.
